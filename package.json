@@ -1,0 +1,19 @@
+{
+  "name": "fravega-frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test_prod": "ENV=PROD_URL npx playwright test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.48.2",
+    "@types/node": "^22.9.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
+}
