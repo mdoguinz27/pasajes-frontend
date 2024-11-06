@@ -20,15 +20,15 @@ test("Ofertas", async ({
     console.log("Ingresando código postal");
     page.waitForLoadState();
   
-    const ofertas = page.locator('span[data-test-id="n1-category"]:text("Ofertas")');
-    await ofertas.click();
+    // Paso 3: Accede al menú Ofertas
+    await page.locator(home.menuOfertas).click();
   
     // Paso 4: Filtrar por marca y ordena menor precio
     page.waitForLoadState();
     await page.locator(results.filterMarca).nth(3).click();
     console.log("Filtra por marca");
   
-    await page.locator('[data-test-id="order-by-select"]').click();
+    await page.locator(results.orderBySelect).click();
     await page.getByRole("link", { name: "Menor precio" }).click();
     console.log("Ordena por Menor precio");
   

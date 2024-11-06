@@ -18,7 +18,7 @@ test("Añade al carrito Heladera Samsung", async ({ page }) => {
 
   // Paso 3: Busca producto
   await page.locator(home.searchField).click();
-  await page.locator(home.searchField).fill("Heladera Samsung");
+  await page.locator(home.searchField).fill(home.product);
   await page.getByRole("group").getByRole("button").click();
   console.log("Busca el producto");
 
@@ -44,7 +44,7 @@ test("Añade al carrito Heladera Samsung", async ({ page }) => {
     ).toBeVisible();
     console.log("Ingresa al carrito");
 
-    await expect(page.getByText("Heladera Samsung")).toBeVisible();
+    await expect(page.getByText(home.product)).toBeVisible();
     console.log("Heladera Samsung en el carrito!");
   } catch {
     console.log('El botón "Comprar" no está disponible');

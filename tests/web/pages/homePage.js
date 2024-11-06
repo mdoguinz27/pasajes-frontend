@@ -5,5 +5,6 @@ export const home = {
     searchField: '[placeholder="Buscar productos"]',
     menuCategory: '[data-test-id="nav-bar"]',
     submenuCategories: '.sc-ikkxIA',
-    product: 'Heladera Samsung'
+    product: 'Heladera Samsung',
+    menuOfertas: 'span[data-test-id="n1-category"]:text("Ofertas")'
 };
