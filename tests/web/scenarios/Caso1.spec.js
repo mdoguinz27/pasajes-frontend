@@ -7,7 +7,7 @@ test.beforeEach(async ({ page }) => {
   // Espera antes de ejecutar cualquier test
   await utils.waitForPageLoad(page);
 });
-test.only("Añade al carrito Heladera Samsung", async ({ page }) => {
+test("Añade al carrito Heladera Samsung", async ({ page }) => {
   // Paso 1: Navegar a la página principal
   await page.goto("/");
   console.log("Navega a la página principal");
