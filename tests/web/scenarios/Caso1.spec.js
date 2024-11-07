@@ -2,18 +2,18 @@ import { test, expect } from "@playwright/test";
 import { home } from "../pages/homePage";
 import { product } from "../pages/productPage";
 import { results } from "../pages/resultsPage";
-import { verifyAndEnterPostalCode} from "../utils/helpers";
+import * as utils from "../utils/helpers";
 test.beforeEach(async ({ page }) => {
   // Espera antes de ejecutar cualquier test
   await utils.waitForPageLoad(page);
 });
-test("Añade al carrito Heladera Samsung", async ({ page }) => {
+test.only("Añade al carrito Heladera Samsung", async ({ page }) => {
   // Paso 1: Navegar a la página principal
   await page.goto("/");
   console.log("Navega a la página principal");
 
   // Paso 2: Ingresar código postal en modal de geolocalización
-  await verifyAndEnterPostalCode(page, "1419");
+  await utils.verifyAndEnterPostalCode(page, "1419");
   console.log("Ingresando código postal");
 
   // Paso 3: Busca producto
