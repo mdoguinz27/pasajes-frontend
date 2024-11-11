@@ -10,16 +10,21 @@ Este proyecto utiliza [Playwright](https://playwright.dev/) para realizar prueba
 ## Instalación
 
 1. Clona el repositorio y navega al directorio del proyecto.
-2. Instala las dependencias con:
+
+     ```bash
+    git clone https://github.com/mdoguinz27/pasajes-frontend.git
+    ```
+     
+3. Instala las dependencias con:
 
     ```bash
     npm install
     ```
 
-3. Instala los navegadores necesarios para Playwright:
+4. Instala los navegadores necesarios para Playwright:
 
     ```bash
-    npx playwright install
+   npx playwright install
     ```
 
 ## Ejecución
@@ -27,12 +32,12 @@ Este proyecto utiliza [Playwright](https://playwright.dev/) para realizar prueba
 Para ejecutar todos los tests, se ejeucta el siguiente comando:
     
 ```bash
-    npm run prod
+npm run prod
  ```
 
 En caso de querer ejecutar un caso especifico, basta con agregar el tag el cual se identifica con un @
 ```bash
-        npm run prod -tag @ida
+ npm run prod -tag @ida
 ````
 
 @ida para caso de BusquedaSoloIda
