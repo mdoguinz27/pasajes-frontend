@@ -26,14 +26,14 @@ Este proyecto utiliza [Playwright](https://playwright.dev/) para realizar prueba
 
 Para ejecutar todos los tests, se ejeucta el siguiente comando:
     
-    ```bash
+```bash
     npm run prod
-    ```
+ ```
 
 En caso de querer ejecutar un caso especifico, basta con agregar el tag el cual se identifica con un @
-    ```bash
-    npm run prod -tag @ida
-    ````
+```bash
+        npm run prod -tag @ida
+````
 
 @ida para caso de BusquedaSoloIda
 @vuelta para caso de BusquedaIdayVuelta
