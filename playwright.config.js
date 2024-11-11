@@ -1,7 +1,6 @@
-// @ts-check
 import { defineConfig, devices } from '@playwright/test';
-require('dotenv').config();
 const environment = process.env.ENV || 'PROD_URL';
+require('dotenv').config();
 
 /**
  * @see https://playwright.dev/docs/test-configuration
@@ -19,7 +18,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
-    ['html', { open: 'always' }]  // Esto genera el reporte y lo abre siempre
+    ['html', { open: 'on-failure' }]  // Esto genera el reporte y lo abre siempre
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
