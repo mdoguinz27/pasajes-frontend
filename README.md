@@ -40,7 +40,9 @@ En caso de querer ejecutar un caso especifico, basta con agregar el tag el cual 
 @modificar para caso donde modifica la búsqueda realizada
 @caso para el caso solicitado en el challenge
 
-# Los reportes se visualizarán automáticamente luego de cada ejecución
+## Reportes
+
+Los reportes se visualizarán automáticamente luego de cada ejecución
 ![image](https://github.com/user-attachments/assets/b5c19a6b-723e-4aca-9ce3-34e2a6bf59ad)
 
 
