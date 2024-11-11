@@ -1,16 +1,7 @@
 import { expect } from '@playwright/test';
-import { geoModal } from '../pages/homePage';
 import { product } from '../pages/productPage';
+import { results } from "../pages/resultsPage";
 
-export async function closeGeoModal(page) {
-    await expect(page.locator(geoModal)).toBeVisible();
-    await page.locator(closeModalButton).click();
-}
-// Función para añadir el código postal en el modal
-export async function verifyAndEnterPostalCode(page, code) {
-    await page.locator(product.postalCodeField).fill(code);
-    await page.locator(product.postalCodeField).press('Enter');
-}
 
 // espera a que cargue la página
 export const waitForPageLoad = async (page) => {
@@ -31,22 +22,26 @@ export const waitForPageLoad = async (page) => {
   
   export const nro_pasajeros = async (page, pasajeros) => {
     // Seleccionamos los botones habilitados (con la clase 'grid free')
-    const botonesHabilitados = await page.locator('div.grid.free a');
+    const botonesHabilitados = await page.locator(product.seatingPax);
 
     // Comprobamos cuántos botones hay disponibles
     const cantidadBotones = await botonesHabilitados.count();
+    if (cantidadBotones === 0) {
+      console.log("No hay asientos disponibles.");
+      return; // Termina si no hay asientos
+  }
 
     // Limitar la selección al número de pasajeros solicitado
     const botonesASeleccionar = Math.min(pasajeros, cantidadBotones);
 
-    // Hacemos clic en los primeros 'botonesASeleccionar' botones habilitados
     for (let i = 0; i < botonesASeleccionar; i++) {
         await botonesHabilitados.nth(i).click();
+        console.log(`Selecciona asiento ${i+1}`)
     }
 }
 
 // Función que selecciona una fecha en el calendario, con opción de fecha de regreso
-export const selectDate = async (page, offsetDays = 0, returnOffsetDays = null) => {
+export const selectDate = async (page, offsetDays = 0) => {
   // Obtén la fecha actual
   const today = new Date();
   
@@ -58,19 +53,26 @@ export const selectDate = async (page, offsetDays = 0, returnOffsetDays = null) 
   const day = targetDate.getDate().toString();
   
   // Busca la celda en el calendario que coincida con el número del día y haz clic
+  await expect(page.getByRole('cell', { name: day, exact: true }).locator('div')).toBeVisible();
   await page.getByRole('cell', { name: day, exact: true }).locator('div').click();
-  await page.waitForTimeout(6000);
 
-  // Si hay una fecha de regreso (returnOffsetDays), selecciona también esa fecha
-  if (returnOffsetDays !== null) {
-    const returnDate = new Date(today);
-    returnDate.setDate(today.getDate() + returnOffsetDays);
-    const returnDay = returnDate.getDate().toString();
-
-    // Selecciona la fecha de regreso en el calendario
-    await page.getByRole('cell', { name: returnDay, exact: true }).locator('div').click();
-  }
 }
 
+export const seleccionarBoleto = async (page, tramo, nro_pax) => {
+  await expect(page.locator(results.resultsTickets)).toBeVisible();
+  
+  // Selecciona el primer boleto disponible
+  await page.locator('#servicios div').locator(results.ticket).nth(0).click();
+  console.log(`Selecciona boleto para ${tramo}`);
+  
+  await page.waitForLoadState('load');
+  
+  // Selecciona asientos según el número de pasajeros
+  await nro_pasajeros(page, nro_pax);
+  
+  // Continuar al siguiente paso
+  await page.getByRole('link', { name: 'Continuar' }).click({force:true});
+  console.log(`[${tramo}] Selecciona asiento para ${nro_pax} pasajeros`);
+}
 
   

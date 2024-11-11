@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import * as utils from "../utils/helpers"
+import { home } from "../pages/homePage";
 
 
 test("@ida Busca pasaje solo ida", {  
@@ -16,7 +17,7 @@ test("@ida Busca pasaje solo ida", {
   console.log("Navega a la página principal");
   
   // Paso 2 : Ingresa datos de búsqueda de pasaje
-  await page.locator('#select2-PadOrigen-container').click();
+  await page.locator(home.origin).click();
   await page.getByRole('textbox', { name: 'Ingresá desde dónde viajás' }).fill('buenos aires');
   await page.getByRole('treeitem').nth(0).click();
   console.log('Selecciona origen')
@@ -50,13 +51,13 @@ test("@ida Busca pasaje solo ida", {
    }
 
    // Si no aparece el modal, sigue con el flujo normal
-   await expect(page.locator('#servicios')).toBeVisible();
-   await page.locator('#servicios div').locator('#LkbComprar').nth(0).click();
-   console.log('Selecciona el primer boleto');
-  
-  await page.waitForTimeout(6000);
 
-   await utils.nro_pasajeros(page, nro_pax);
-   console.log(`Selecciona asiento para ${nro_pax} pasajeros`);
-   await page.getByRole('link', { name: 'Continuar' }).click();
-});
+   await utils.seleccionarBoleto(page, "Ida", nro_pax); // Tramo de ida
+  });
+
+  test.afterEach(async ({ page }, testInfo) => {
+   const screenshotPath = `screenshots/${testInfo.title.replace(/\s+/g, '_')}.png`;  
+   // Capturar screenshot al final del test
+   await page.screenshot({ path: screenshotPath, fullPage: true });
+   console.log(`Screenshot guardado en: ${screenshotPath}`);
+ });
