@@ -32,7 +32,7 @@ Para ejecutar todos los tests, se ejeucta el siguiente comando:
 
 En caso de querer ejecutar un caso especifico, basta con agregar el tag el cual se identifica con un @
     ```bash
-    npm run prod -g @ida
+    npm run prod -tag @ida
     ````
 
 @ida para caso de BusquedaSoloIda
@@ -44,11 +44,9 @@ En caso de querer ejecutar un caso especifico, basta con agregar el tag el cual 
 
 1. **Uso de Playwright**:
    - **Rendimiento y compatibilidad multiplataforma**: Se eligió Playwright debido a su capacidad para ejecutar pruebas en múltiples navegadores (Chromium, Firefox, WebKit) y plataformas (Windows, macOS, Linux). Esto asegura que las pruebas reflejen fielmente la experiencia del usuario en diferentes entornos.
-   - **Manejo robusto de iframes y pop-ups**: Playwright sobresale en la manipulación de ventanas emergentes y frames, características críticas para escenarios como pagos en PayPal o modales emergentes.
 
 2. **Implementación de Tags Opcionales**:
-   - **Flexibilidad en la ejecución de tests**: Se incorporó el uso de `tags` opcionales mediante el parámetro `--grep` para filtrar y ejecutar pruebas específicas cuando sea necesario. Esto permite a los desarrolladores concentrarse en áreas críticas sin ejecutar toda la suite.
-   - **Evitar errores en ausencia de `tags`**: El manejo condicional de `--grep` asegura que la suite de pruebas se ejecute sin errores, incluso cuando no se pasan etiquetas, maximizando la usabilidad.
+   - **Flexibilidad en la ejecución de tests**: Se incorporó el uso de `tags` opcionales mediante el parámetro `--tag` para filtrar y ejecutar pruebas específicas cuando sea necesario. Esto permite a los desarrolladores concentrarse en áreas críticas sin ejecutar toda la suite.
 
 3. **Gestión de Configuración a través de Variables de Entorno**:
    - **Separación de entornos**: La configuración de la URL base (`baseURL`) mediante variables de entorno (`ENV`) facilita la ejecución en diferentes ambientes (producción, staging) sin modificar el código. Esto garantiza una mayor flexibilidad y evita errores relacionados con entornos incorrectos.
@@ -58,7 +56,7 @@ En caso de querer ejecutar un caso especifico, basta con agregar el tag el cual 
    - **Trazabilidad y diagnóstico**: Se implementó la captura automática de capturas de pantalla al final de cada prueba para facilitar la depuración en caso de fallos. Esto mejora la visibilidad del estado de la aplicación y reduce el tiempo de resolución de problemas.
 
 5. **Funciones Reutilizables**:
-   - **Modularidad y reducción de duplicación**: Se desarrollaron funciones reutilizables como `selectDate` y `nro_pasajeros` para operaciones comunes (selección de fechas, asignación de asientos). Esto reduce la duplicación de código y facilita el mantenimiento.
+   - **Modularidad y reducción de duplicación**: Se desarrollaron funciones reutilizables como `selectDate` y `selectSeat` para operaciones comunes (selección de fechas, asignación de asientos). Esto reduce la duplicación de código y facilita el mantenimiento.
    - **Abstracción para flujos complejos**: La creación de funciones específicas para manejar modales o pasos condicionales (como manejar la selección de boletos de ida y vuelta) garantiza que el código sea más legible y fácil de extender.
 
 6. **Estrategia de Manejo de Excepciones**:

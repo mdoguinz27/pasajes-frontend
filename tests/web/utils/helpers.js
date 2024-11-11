@@ -1,26 +1,8 @@
 import { expect } from '@playwright/test';
 import { product } from '../pages/productPage';
 import { results } from "../pages/resultsPage";
-
-
-// espera a que cargue la página
-export const waitForPageLoad = async (page) => {
-    await page.waitForLoadState('load');
-  };
- 
-  // ingreso de texto
-  export const safeFill = async (page, selector, text) => {
-    await waitForPageLoad(page);  // Asegura que la página esté lista
-    await page.fill(selector, text);
-  };
-  
-  // click a un elemento
-  export const safeClick = async (page, selector) => {
-    await waitForPageLoad(page);  // Asegura que la página esté lista
-    await page.click(selector);
-  };
-  
-  export const nro_pasajeros = async (page, pasajeros) => {
+   
+  export const selectSeat = async (page, pasajeros) => {
     // Seleccionamos los botones habilitados (con la clase 'grid free')
     const botonesHabilitados = await page.locator(product.seatingPax);
 
@@ -36,6 +18,7 @@ export const waitForPageLoad = async (page) => {
 
     for (let i = 0; i < botonesASeleccionar; i++) {
         await botonesHabilitados.nth(i).click();
+        await page.waitForLoadState('load');
         console.log(`Selecciona asiento ${i+1}`)
     }
 }
@@ -68,7 +51,7 @@ export const seleccionarBoleto = async (page, tramo, nro_pax) => {
   await page.waitForLoadState('load');
   
   // Selecciona asientos según el número de pasajeros
-  await nro_pasajeros(page, nro_pax);
+  await selectSeat(page, nro_pax);
   
   // Continuar al siguiente paso
   await page.getByRole('link', { name: 'Continuar' }).click({force:true});

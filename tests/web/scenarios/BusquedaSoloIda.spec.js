@@ -18,11 +18,11 @@ test("@ida Busqueda pasaje Solo Ida", {
   
   // Paso 2 : Ingresa datos de búsqueda de pasaje
   await page.locator(home.origin).click();
-  await page.getByRole('textbox', { name: 'Ingresá desde dónde viajás' }).fill('buenos aires');
+  await page.getByRole('textbox', { name: home.originName }).fill('buenos aires');
   await page.getByRole('treeitem').nth(0).click();
   console.log('Selecciona origen')
 
-  await page.getByRole('textbox', { name: 'Ingresá hacia dónde viajás' }).fill('cordoba');  
+  await page.getByRole('textbox', { name: home.destinationName }).fill('cordoba');  
   await page.getByRole('treeitem').nth(0).click();
   await page.getByPlaceholder('Ida').click();
   console.log('Selecciona destino')
@@ -49,9 +49,6 @@ test("@ida Busqueda pasaje Solo Ida", {
            return;
        }
    }
-
-   // Si no aparece el modal, sigue con el flujo normal
-
    await utils.seleccionarBoleto(page, "Ida", nro_pax); // Tramo de ida
   });
 

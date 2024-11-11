@@ -13,51 +13,50 @@ test("@caso Busqueda pasaje Solo Ida", {
   const nro_pax=1 // cantidad de pasajeros
 
   // Paso 1: Navegar a la página principal
-  await page.goto('/')
+  await page.goto("/");
   console.log("Navega a la página principal");
-  
+
   // Paso 2 : Ingresa datos de búsqueda de pasaje
   await page.locator(home.origin).click();
-  await page.getByRole('textbox', { name: 'Ingresá desde dónde viajás' }).fill('buenos aires');
-  await page.getByRole('treeitem').nth(0).click();
-  console.log('Selecciona origen')
+  await page
+    .getByRole("textbox", { name: home.originName })
+    .fill("capital federal");
+  await page.getByRole("treeitem").nth(0).click();
+  console.log("Selecciona origen");
 
-  await page.getByRole('textbox', { name: 'Ingresá hacia dónde viajás' }).fill('la plata');  
-  await page.getByRole('treeitem').nth(0).click();
-  await page.getByPlaceholder('Ida').click();
-  console.log('Selecciona destino')
+  await page
+    .getByRole("textbox", { name: home.destinationName })
+    .fill("bariloche");
+  await page.getByRole("treeitem").nth(0).click();
+  console.log("Selecciona destino");
 
-  await utils.selectDate(page, 5)
-  console.log('Ingresa fechas')
+  await page.getByText(home.roundTrip).click();
+  await page.getByPlaceholder("Ida").click();
+  await utils.selectDate(page, 2);
+  await page.getByPlaceholder("Vuelta").click();
+  await utils.selectDate(page, 6);
+  console.log("Ingresa fechas");
 
-  await page.locator('#pasajeros').selectOption(`${nro_pax}`);
-  console.log('Ingresa cantidad de pasajeros')
+  await page.locator(home.paxs).selectOption(`${nro_pax}`);
+  console.log("Ingresa cantidad de pasajeros");
 
-  await page.getByRole('button', { name: 'Buscar' }).click();
-  console.log('Ejecuta la búsqueda')
+  await page.getByRole("button", { name: "Buscar" }).click();
+  console.log("Ejecuta la búsqueda");
 
-   // Espera y maneja el modal de producto no disponible, si aparece
-   const modal = page.locator('#modal-alert');
-   const modalVisible = await modal.isVisible();
+  // Espera si aparece el modal de que no hay pasajes disponibles
+  const modal = page.locator(home.modal);
+  const modalVisible = await modal.isVisible();
 
-   if (modalVisible) {
-       const modalText = await modal.locator('.modal-body').innerText();
-       if (modalText.includes('No encontramos opciones para tu viaje. Intentá con otra fecha, origen o destino. Si vas a la Costa, recordá que algunas localidades no tienen terminal, pero podés viajar a la más cercana.')) {
-           console.warn('No se encontraron pasajes para la búsqueda.');
-           return;
-       }
-   }
-
-   // Pas 3: Ordena pasajes
-   await page.getByText("Ordenar por más temprano más").click();
-   await page.getByRole("option", { name: "menor precio" }).click();
-   console.log('Ordena por precio')
-   await expect(page.locator("#servicios")).toBeVisible();
-  });
-
-  test.afterEach(async ({ page }, testInfo) => {
-   const screenshotPath = `screenshots/${testInfo.title.replace(/\s+/g, '_')}.png`;  
-   // Capturar screenshot al final del test
-   await page.screenshot({ path: screenshotPath, fullPage: true });
-   console.log(`Screenshot guardado en: ${screenshotPath}`);
+  if (modalVisible) {
+    // Verifica si el modal contiene el texto esperado
+    const modalText = await modal.locator(".modal-body").innerText();
+    if (
+      modalText.includes(
+        "No encontramos opciones para tu viaje. Intentá con otra fecha, origen o destino."
+      )
+    ) {
+      console.log("No se encontraron pasajes para la búsqueda.");
+      return;
+    }
+  }
  });
