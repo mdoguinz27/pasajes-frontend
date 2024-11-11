@@ -30,10 +30,11 @@ test.beforeEach("Busca un pasaje", async ({ page }) => {
   await page.locator("#pasajeros").selectOption(`${nro_pax}`);
   console.log("Ingresa cantidad de pasajeros");
 
+  // Paso 5: Ejecuta la búsqueda y verifica la disponibilidad de pasajes
   await page.getByRole("button", { name: "Buscar" }).click();
   console.log("Ejecuta la búsqueda");
 
-  // Espera y maneja el modal si aparece
+  // Espera y maneja el modal de producto no disponible, si aparece
   const modal = page.locator('#modal-alert');
   const modalVisible = await modal.isVisible();
 
@@ -49,7 +50,7 @@ test.beforeEach("Busca un pasaje", async ({ page }) => {
 });
 
 test(
-  "@modificar Modifica un pasaje",
+  "@modificar Modifica un pasaje de solo ida a ida y vuelta",
   {
     annotation: {
       type: "Positive",
@@ -57,7 +58,7 @@ test(
     },
   },
   async ({ page }) => {
-    // Paso 4 : Modifica la búsqueda
+    // Paso 1: Modifica la búsqueda
     await page.getByText("Modificar").click();
     await page
       .locator("#modal-buscador div")
@@ -71,7 +72,7 @@ test(
     await page.waitForLoadState('load');
     console.log('Actualiza la búsqueda')
 
-    // Pas 5: Ordena pasajes por más temprano
+    // Pas 2: Ordena pasajes 
     await page.getByText("Ordenar por más temprano más").click();
     await page.getByRole("option", { name: "menor precio" }).click();
     console.log('Ordena por precio')

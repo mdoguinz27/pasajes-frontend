@@ -3,14 +3,14 @@ import * as utils from "../utils/helpers"
 import { home } from "../pages/homePage";
 
 
-test("@ida Busqueda pasaje Solo Ida", {  
+test("@caso Busqueda pasaje Solo Ida", {  
   annotation: {
     type: 'e2e',
-    description: 'Busca pasaje solo ida para 3 personas'
+    description: 'Desarrollar pruebas automatizadas que validen la funcionalidad de búsqueda y la visualización de los resultados en el sitio.'
   }
 }, async ({ page }) => {
 
-  const nro_pax=3 // cantidad de pasajeros
+  const nro_pax=1 // cantidad de pasajeros
 
   // Paso 1: Navegar a la página principal
   await page.goto('/')
@@ -22,7 +22,7 @@ test("@ida Busqueda pasaje Solo Ida", {
   await page.getByRole('treeitem').nth(0).click();
   console.log('Selecciona origen')
 
-  await page.getByRole('textbox', { name: 'Ingresá hacia dónde viajás' }).fill('cordoba');  
+  await page.getByRole('textbox', { name: 'Ingresá hacia dónde viajás' }).fill('la plata');  
   await page.getByRole('treeitem').nth(0).click();
   await page.getByPlaceholder('Ida').click();
   console.log('Selecciona destino')
@@ -41,18 +41,18 @@ test("@ida Busqueda pasaje Solo Ida", {
    const modalVisible = await modal.isVisible();
 
    if (modalVisible) {
-       // Verifica si el modal contiene el texto esperado
        const modalText = await modal.locator('.modal-body').innerText();
        if (modalText.includes('No encontramos opciones para tu viaje. Intentá con otra fecha, origen o destino. Si vas a la Costa, recordá que algunas localidades no tienen terminal, pero podés viajar a la más cercana.')) {
            console.warn('No se encontraron pasajes para la búsqueda.');
-           // Finaliza el test exitosamente si aparece el modal con el texto correcto
            return;
        }
    }
 
-   // Si no aparece el modal, sigue con el flujo normal
-
-   await utils.seleccionarBoleto(page, "Ida", nro_pax); // Tramo de ida
+   // Pas 3: Ordena pasajes
+   await page.getByText("Ordenar por más temprano más").click();
+   await page.getByRole("option", { name: "menor precio" }).click();
+   console.log('Ordena por precio')
+   await expect(page.locator("#servicios")).toBeVisible();
   });
 
   test.afterEach(async ({ page }, testInfo) => {

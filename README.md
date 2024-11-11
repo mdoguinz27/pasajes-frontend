@@ -22,65 +22,51 @@ Este proyecto utiliza [Playwright](https://playwright.dev/) para realizar prueba
     npx playwright install
     ```
 
-## Estructura del Proyecto
+## Ejecución
 
-- **`pages/`**: Contiene archivos de páginas (`homePage.js`, `productPage.js`, `resultsPage.js`) que representan diferentes secciones de la aplicación.
-- **`utils/`**: Contiene helpers para tareas comunes, como la función `verifyAndEnterPostalCode`.
-- **`tests/`**: Contiene los archivos de test (`CasoLibre.spec.js`) con los escenarios de prueba.
+Para ejecutar todos los tests, se ejeucta el siguiente comando:
+    
+    ```bash
+    npm run prod
+    ```
 
-## Tests
+En caso de querer ejecutar un caso especifico, basta con agregar el tag el cual se identifica con un @
+    ```bash
+    npm run prod -g @ida
+    ````
 
-### 1. `CasoLibre`
+@ida para caso de BusquedaSoloIda
+@vuelta para caso de BusquedaIdayVuelta
+@modificar para caso donde modifica la búsqueda realizada
+@caso para el caso solicitado en el challenge
 
-Este test navega a la página principal, ingresa al menú "Ofertas", filtra por marca y ordena por precio, añade un producto al carrito y finaliza verificando dentro del carrito que el producto haya sido agregado
+### Justificación de las Decisiones de Diseño en la Automatización
 
-**Pasos del test**:
+1. **Uso de Playwright**:
+   - **Rendimiento y compatibilidad multiplataforma**: Se eligió Playwright debido a su capacidad para ejecutar pruebas en múltiples navegadores (Chromium, Firefox, WebKit) y plataformas (Windows, macOS, Linux). Esto asegura que las pruebas reflejen fielmente la experiencia del usuario en diferentes entornos.
+   - **Manejo robusto de iframes y pop-ups**: Playwright sobresale en la manipulación de ventanas emergentes y frames, características críticas para escenarios como pagos en PayPal o modales emergentes.
 
-1. Navega a la página principal.
-2. Ingresa el código postal en el modal de geolocalización.
-3. Accede al menú de Ofertas.
-4. Filtra por una marca específica y ordena por "Menor precio".
-5. Selecciona el segundo producto del listado de resultados.
-6. Verifica que el precio del producto sea visible.
-7. Agrega el producto al carrito.
-8. Ingresa al carrito y verifica que el botón "Finalizar Compra" esté disponible.
+2. **Implementación de Tags Opcionales**:
+   - **Flexibilidad en la ejecución de tests**: Se incorporó el uso de `tags` opcionales mediante el parámetro `--grep` para filtrar y ejecutar pruebas específicas cuando sea necesario. Esto permite a los desarrolladores concentrarse en áreas críticas sin ejecutar toda la suite.
+   - **Evitar errores en ausencia de `tags`**: El manejo condicional de `--grep` asegura que la suite de pruebas se ejecute sin errores, incluso cuando no se pasan etiquetas, maximizando la usabilidad.
 
-### 2. `Añade al carrito Heladera Samsung`
+3. **Gestión de Configuración a través de Variables de Entorno**:
+   - **Separación de entornos**: La configuración de la URL base (`baseURL`) mediante variables de entorno (`ENV`) facilita la ejecución en diferentes ambientes (producción, staging) sin modificar el código. Esto garantiza una mayor flexibilidad y evita errores relacionados con entornos incorrectos.
+   - **Compatibilidad con Windows y macOS**: El uso de `cross-env` asegura que los scripts funcionen correctamente en sistemas operativos con diferentes manejos de variables de entorno.
 
-Este test busca un producto específico (Heladera Samsung) y lo añade al carrito.
+4. **Captura de Screenshots al Final de Cada Test**:
+   - **Trazabilidad y diagnóstico**: Se implementó la captura automática de capturas de pantalla al final de cada prueba para facilitar la depuración en caso de fallos. Esto mejora la visibilidad del estado de la aplicación y reduce el tiempo de resolución de problemas.
 
-**Pasos del test**:
+5. **Funciones Reutilizables**:
+   - **Modularidad y reducción de duplicación**: Se desarrollaron funciones reutilizables como `selectDate` y `nro_pasajeros` para operaciones comunes (selección de fechas, asignación de asientos). Esto reduce la duplicación de código y facilita el mantenimiento.
+   - **Abstracción para flujos complejos**: La creación de funciones específicas para manejar modales o pasos condicionales (como manejar la selección de boletos de ida y vuelta) garantiza que el código sea más legible y fácil de extender.
 
-1. Navega a la página principal.
-2. Ingresa el código postal en el modal de geolocalización.
-3. Busca el producto en el campo de búsqueda.
-4. Selecciona el segundo producto del listado de resultados.
-5. Verifica que el precio del producto sea visible.
-6. Agrega el producto al carrito.
-7. Ingresa al carrito y verifica que el producto esté añadido.
+6. **Estrategia de Manejo de Excepciones**:
+   - **Tolerancia a fallos**: En escenarios donde no se encuentran boletos, se diseñaron pruebas para capturar y manejar modales informativos, finalizando la prueba de manera exitosa si no hay disponibilidad. Esto simula mejor los flujos reales de usuario y evita fallos innecesarios.
 
-## Ejecución de los Tests
+### Beneficios de las Decisiones Tomadas:
+- **Mantenibilidad**: La modularidad y reutilización del código simplifican el mantenimiento y la extensión de la suite.
+- **Eficiencia**: El filtrado por etiquetas y la configuración dinámica aseguran que los desarrolladores puedan ejecutar solo las pruebas necesarias en cada entorno.
+- **Confiabilidad**: La captura de errores y manejo robusto de excepciones mejora la estabilidad de las pruebas en escenarios dinámicos. 
 
-Para ejecutar ambos tests, utiliza el siguiente comando:
-
-```bash
-npm run test_prod            
-````
-
-Este test puede ejecutarse en 3 ambientes diferentes (qa, dev, prod) donde los 2 primeros poseen urls ficticias, al finalizar la ejecución de los tests, se abrirá automaticamente un reporte de la ejecución de los mismos
-
-fravega-frontend
-├── tests
-│   ├── common
-│   │   └── config.js          # Configuración general (URLs, variables compartidas, etc.)
-│   ├── web
-│   │   ├── pages              # Páginas organizadas por componentes de UI o áreas funcionales
-│   │   │   ├── cartPage.js       # Página del carrito con selectores y métodos de interacción
-│   │   │   ├── homePage.js       # Página de inicio con selectores y métodos de interacción
-│   │   │   ├── productPage.js    # Página de producto con selectores y métodos de interacción
-│   │   │   └── resultsPage.js    # Página de resultados con selectores y métodos de interacción
-│   │   └── scenarios           # Escenarios de prueba completos, organizados por flujo o caso de uso
-│   │       └── testExample.spec.js  # Ejemplo de caso de prueba (p. ej., CasoLibre.spec.js)
-│   └── utils
-│       └── helpers.js          # Funciones auxiliares (e.g., ingreso de código postal, waits)
-└── README.md
+Estas decisiones reflejan un enfoque orientado a la calidad, la flexibilidad y la eficiencia en el desarrollo de la automatización.

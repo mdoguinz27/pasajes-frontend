@@ -3,12 +3,12 @@ import * as utils from "../utils/helpers";
 import { home } from "../pages/homePage";
 
 test(
-  "@vuelta Búsqueda Ida y Vuelta",
+  "@vuelta Búsqueda pasaje Ida y Vuelta",
   {
     annotation: {
-      type: "Negative",
+      type: "e2e",
       description:
-        "Busca pasaje ida y vuelta para 2 personas. Este test tiene altas posibilidades de fallar",
+        "Busca pasaje ida y vuelta para 2 personas",
     },
   },
   async ({ page }) => {
