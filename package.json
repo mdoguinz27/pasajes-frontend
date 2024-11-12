@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prod": "cross-env ENV=PROD_URL npx playwright test --headless=false --tag $npm_config_tag || npx playwright test"
+    "prod": "cross-env ENV=PROD_URL npx playwright test --tag $npm_config_tag || npx playwright test"
   },
   "keywords": [],
   "author": "",
