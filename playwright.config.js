@@ -1,6 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 const environment = process.env.ENV || "PROD_URL";
-const isCI = process.env.CI === "true";
+const isCI = !!process.env.CI;
 require("dotenv").config();
 
 /**
@@ -25,7 +25,7 @@ export default defineConfig({
   use: {
     headless: isCI,
     trace: "on",
-    baseURL: process.env[environment],
+    baseURL: process.env[environment]|| 'http://localhost:3000',
     video: "on",
   },
 
