@@ -1,13 +1,14 @@
-import { defineConfig, devices } from '@playwright/test';
-const environment = process.env.ENV || 'PROD_URL';
-require('dotenv').config();
+import { defineConfig, devices } from "@playwright/test";
+const environment = process.env.ENV || "PROD_URL";
+const isCI = process.env.CI === "true";
+require("dotenv").config();
 
 /**
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
-  timeout:120000,
-  testDir: './tests',
+  timeout: 120000,
+  testDir: "./tests",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -18,20 +19,21 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
-    ['html', { open: 'always' }]  // Esto genera el reporte y lo abre siempre
+    ["html", { open: "always" }], // Esto genera el reporte y lo abre siempre
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-   trace: 'on',
+    headless: isCI,
+    trace: "on",
     baseURL: process.env[environment],
-    video: 'on'
+    video: "on",
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'], headless:false },
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
     },
 
     // {
