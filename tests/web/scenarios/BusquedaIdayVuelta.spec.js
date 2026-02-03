@@ -47,19 +47,19 @@ test(
 
     // Espera si aparece el modal de que no hay pasajes disponibles
     const modal = page.locator(home.modal);
-    const modalVisible = await modal.isVisible();
 
-    if (modalVisible) {
-      // Verifica si el modal contiene el texto esperado
+    // Esperar un momento para que el modal pueda aparecer si no hay resultados
+    try {
+      await modal.waitFor({ state: 'visible', timeout: 5000 });
+      // Si el modal apareció, verificar el texto
       const modalText = await modal.locator(".modal-body").innerText();
-      if (
-        modalText.includes(
-          "No encontramos opciones para tu viaje. Intentá con otra fecha, origen o destino. Si vas a la Costa, recordá que algunas localidades no tienen terminal, pero podés viajar a la más cercana."
-        )
-      ) {
+      if (modalText.includes("No encontramos opciones para tu viaje")) {
         console.log("No se encontraron pasajes para la búsqueda.");
         return;
       }
+    } catch {
+      // El modal no apareció, significa que hay resultados - continuar
+      console.log('Modal no apareció, continuando con la selección de boleto');
     }
 
     // Si no aparece el modal, sigue con el flujo normal
